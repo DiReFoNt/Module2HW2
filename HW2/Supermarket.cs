@@ -10,6 +10,7 @@ namespace HW2
     {
         private Cart _cart = new Cart();
         private List<Product> _shopWindow = new List<Product>();
+        private List<Product> _productsCart = new List<Product>();
         public Supermarket()
         {
             _shopWindow.Add(new Product("Potato", 10));
@@ -48,10 +49,77 @@ namespace HW2
                     break;
                 }
 
-                _cart.ChangeCart(_shopWindow, product);
+                ChangeCart(_shopWindow, product);
                 productsCounter = _cart.GetProductsCounter();
                 totalAmount = _cart.GetTotalAmount();
                 Console.WriteLine($"Now there are {productsCounter} items in the cart for the amount: {totalAmount}$");
+            }
+        }
+
+        private void ChangeCart(List<Product> shopWindow, string product)
+        {
+            if (product.StartsWith('+') || product.StartsWith('-'))
+            {
+                if (product.StartsWith('+'))
+                {
+                    bool productOutShop = false;
+                    product = product.Substring(1);
+                    string productToUpper = Convert.ToString(product[0]).ToUpper();
+                    product = product.Replace(product[0], Convert.ToChar(productToUpper));
+                    for (int i = 0; i < shopWindow.Count; i++)
+                    {
+                        for (int j = 0; j < _productsCart.Count; j++)
+                        {
+                            if (product == _productsCart[j].Name & productOutShop == false)
+                            {
+                                _cart.TotalAmount += _productsCart[j].Price;
+                                productOutShop = true;
+                                ++_cart.ProductsCounter;
+                            }
+                        }
+
+                        if (product == shopWindow[i].Name & productOutShop == false)
+                        {
+                            _productsCart.Add(shopWindow[i]);
+                            _cart.TotalAmount += shopWindow[i].Price;
+                            productOutShop = true;
+                            ++_cart.ProductsCounter;
+                        }
+                    }
+
+                    if (productOutShop == false)
+                    {
+                        Console.WriteLine("The product is out of stock");
+                    }
+                }
+
+                if (product.StartsWith('-'))
+                {
+                    bool productOutShop = false;
+                    product = product.Substring(1);
+                    string productToUpper = Convert.ToString(product[0]).ToUpper();
+                    product = product.Replace(product[0], Convert.ToChar(productToUpper));
+                    for (int i = 0; i < _productsCart.Count; i++)
+                    {
+                        if (product == _productsCart[i].Name)
+                        {
+                            _cart.TotalAmount -= _productsCart[i].Price;
+                            _cart.ProductsCounter -= 1;
+                            productOutShop = true;
+                        }
+                    }
+
+                    if (productOutShop == false)
+                    {
+                        Console.WriteLine("Product not in cart");
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Choose one of the available commands");
+                product = Convert.ToString(Console.ReadLine());
+                ChangeCart(shopWindow, product);
             }
         }
     }

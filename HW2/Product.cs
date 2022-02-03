@@ -14,10 +14,6 @@ namespace HW2
             Price = price;
         }
 
-        private Product()
-        {
-        }
-
         public string Name { get; private set; }
         public decimal Price { get; private set; }
     }
