@@ -11,6 +11,7 @@ namespace HW2
         private Cart _cart = new Cart();
         private List<Product> _shopWindow = new List<Product>();
         private List<Product> _productsCart = new List<Product>();
+        private Order _order = new Order();
         public Supermarket()
         {
             _shopWindow.Add(new Product("Potato", 10));
@@ -45,7 +46,7 @@ namespace HW2
                 product = Convert.ToString(Console.ReadLine());
                 if (product == "Create")
                 {
-                    _cart.GetOrder(totalAmount, productsCounter);
+                    _order.GetOrder(totalAmount, productsCounter);
                     break;
                 }
 
